@@ -2,9 +2,10 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 require('dotenv').config()
-const port = 3000
-const mongo_url = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@airbnb-alt.wiica1f.mongodb.net/?retryWrites=true&w=majority`
-const Listing = require("../models/listing.js")
+const port = 8080
+const mongo_url = `mongodb+srv://${process.env.MONGOUSERNAME}:${process.env.MONGOPASSWORD}@projects.e6luzys.mongodb.net/wanderlust?retryWrites=true&w=majority`
+// const mongo_url = "mongodb://127.0.0.1/wanderlust"
+const Listing = require("./models/listing.js")
 
 
 main().then(() => {
@@ -34,5 +35,8 @@ app.get("/test",  async (req, res) => {
         country: "India",
     })
     await sampleListing.save();
-    console.log("sample was saved"),
+    console.log("sample was saved");
+    res.send("done")
 })
+
+app.listen(port)
