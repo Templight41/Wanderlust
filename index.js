@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const path = require('path')
 const mongoose = require('mongoose')
 require('dotenv').config()
 const port = 8080
@@ -7,6 +8,10 @@ const mongo_url = `mongodb+srv://${process.env.MONGOUSERNAME}:${process.env.MONG
 // const mongo_url = "mongodb://127.0.0.1/wanderlust"
 const Listing = require("./models/listing.js")
 
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"))
+app.use(express.urlencoded({extended: true}))
 
 main().then(() => {
     console.log("connected")
@@ -24,6 +29,20 @@ async function main() {
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
+})
+
+
+//Index Route
+app.get('/listings', async (req, res) => {
+    const allListings = await Listing.find({});
+    res.render("listings/index.ejs", {allListings})
+})
+
+//Show Route
+app.get("/listings/:id", async (req, res) => {
+    let {id} = req.params;
+    const listing = await Listing.findById(id);
+    res.render("listings/show.ejs", {listing});
 })
 
 app.get("/test",  async (req, res) => {
